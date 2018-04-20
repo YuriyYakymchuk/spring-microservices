@@ -14,5 +14,6 @@ public class StockController {
 
     @DeleteMapping("/stock")
     public void minusFromStock(@RequestBody List<Integer> menuItems) {
+        stockService.minusFromStock(menuItems);
     }
 }

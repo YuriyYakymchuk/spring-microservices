@@ -15,5 +15,6 @@ public class OrderController {
 
     @PostMapping("/order/{tableId}")
     public Integer createOrder(@PathVariable Integer tableId, @RequestBody List<Integer> menuItems) {
+        return orderService.createOrder(tableId, menuItems);
     }
 }

@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class MenuController {
+
     @Autowired
     private MenuService menuService;
 
     @GetMapping("/menu")
     public Map<Integer, String> getMenu() {
+        return menuService.getMenuItems();
     }
 }

@@ -15,17 +15,21 @@ public class TableController {
 
     @GetMapping("/tables")
     public List<Integer> getTables() {
+        return tableService.getTableIds();
     }
 
     @GetMapping("/tables/free")
     public List<Integer> getFreeTables() {
+        return tableService.getFreeTableIds();
     }
 
     @PutMapping("/table/{id}/free")
     public void freeTable(@PathVariable Integer id) {
+        tableService.updateTable(id, true);
     }
 
     @PutMapping("/table/{id}/occupy")
     public void occupyTable(@PathVariable Integer id) {
+        tableService.updateTable(id, false);
     }
 }

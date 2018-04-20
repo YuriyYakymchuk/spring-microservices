@@ -14,9 +14,11 @@ public class BillController {
 
     @PostMapping("/bill/{tableId}/{orderId}")
     public void createBill(@PathVariable Integer tableId, @PathVariable Integer orderId) {
+        billService.createBill(tableId, orderId);
     }
 
     @DeleteMapping("/bills/{tableId}")
     public void payBills(@PathVariable Integer tableId) {
+        billService.payBills(tableId);
     }
 }
