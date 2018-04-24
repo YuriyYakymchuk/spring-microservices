@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Transactional
 public class TableService {
+
     @Autowired
     private TableRepository tableRepository;
 
@@ -36,5 +37,4 @@ public class TableService {
         table.setFree(isFree);
         tableRepository.save(table);
     }
-
 }

@@ -7,6 +7,7 @@ import javax.persistence.Id;
 
 @Entity(name = "menu_items")
 public class MenuItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

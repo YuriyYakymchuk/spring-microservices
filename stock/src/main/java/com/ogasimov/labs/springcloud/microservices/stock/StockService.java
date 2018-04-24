@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Transactional
 public class StockService {
+
     @Autowired
     private StockRepository stockRepository;
 
@@ -25,6 +26,5 @@ public class StockService {
             stock.setCount(stock.getCount() - 1);
             stockRepository.save(stock);
         });
-
     }
 }

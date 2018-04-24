@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @FeignClient("Bill")
 public interface BillClient {
+
     @PostMapping("/bill/{tableId}/{orderId}")
     void createBill(@PathVariable("tableId") Integer tableId, @PathVariable("orderId") Integer orderId);
 

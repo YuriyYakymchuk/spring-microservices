@@ -8,6 +8,7 @@ import javax.persistence.Id;
 
 @Entity(name = "orders")
 public class Order {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
