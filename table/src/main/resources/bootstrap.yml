@@ -2,7 +2,7 @@ spring:
   application:
     name: Table
   datasource:
-    url: jdbc:mysql://localhost:3306/microservices
+    url: jdbc:mysql://localhost:3306/microservices?useSSL=false
     username: root
     password: root
     driver-class-name: com.mysql.jdbc.Driver
