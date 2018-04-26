@@ -26,3 +26,24 @@ eureka:
     fetch-registry: true
     registry-fetch-interval-seconds: 5
     register-with-eureka: true
+
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 1000
+            iterruptOnTimeout: true
+            interruptOnCancel: false
+      circuitBreaker:
+        enabled: true
+        requestVolumeThreshold: 20
+        sleepWindowInMilliseconds: 5000
+        errorThresholdInMilliseconds: 50
+        forceOpen: false
+        forceClosed: false
+
+
