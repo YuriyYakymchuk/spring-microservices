@@ -33,6 +33,6 @@ hystrix:
         enabled: true
         requestVolumeThreshold: 20
         sleepWindowInMilliseconds: 5000
-        errorThresholdInMilliseconds: 50
+        errorThresholdInMilliseconds: 5000
         forceOpen: false
         forceClosed: false

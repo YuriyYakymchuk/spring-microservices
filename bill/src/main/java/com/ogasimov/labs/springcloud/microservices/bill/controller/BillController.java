@@ -1,5 +1,6 @@
 package com.ogasimov.labs.springcloud.microservices.bill.controller;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.ogasimov.labs.springcloud.microservices.bill.service.BillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,8 +19,14 @@ public class BillController {
         billService.createBill(tableId, orderId);
     }
 
+    @HystrixCommand(fallbackMethod = "fallbackMethod")
     @DeleteMapping("/bills/{tableId}")
-    public void payBills(@PathVariable Integer tableId) {
+    public String payBills(@PathVariable Integer tableId) {
         billService.payBills(tableId);
+        return "Ok";
+    }
+
+    public String fallbackMethod(Integer tableId) {
+        throw new RuntimeException("Something went wrong");
     }
 }
