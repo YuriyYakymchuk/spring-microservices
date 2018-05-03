@@ -3,10 +3,7 @@ package com.ogasimov.labs.springcloud.microservices.bill.controller;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.ogasimov.labs.springcloud.microservices.bill.service.BillService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class BillController {
@@ -24,6 +21,11 @@ public class BillController {
     public String payBills(@PathVariable Integer tableId) {
         billService.payBills(tableId);
         return "Ok";
+    }
+
+    @GetMapping("/bill/message")
+    public String getMessage() {
+        return billService.getMessage();
     }
 
     public String fallbackMethod(Integer tableId) {

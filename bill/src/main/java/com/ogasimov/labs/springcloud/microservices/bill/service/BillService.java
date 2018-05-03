@@ -7,14 +7,20 @@ import javax.transaction.Transactional;
 import com.ogasimov.labs.springcloud.microservices.bill.dao.BillRepository;
 import com.ogasimov.labs.springcloud.microservices.bill.model.Bill;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Service;
 
 @Service
+@RefreshScope
 @Transactional
 public class BillService {
 
     @Autowired
     private BillRepository billRepository;
+
+    @Value("${custom.message}")
+    private String message;
 
     public void createBill(Integer tableId, Integer orderId) {
         Bill bill = new Bill();
@@ -29,5 +35,9 @@ public class BillService {
             throw  new EntityNotFoundException("Bills not found");
         }
         billRepository.delete(bills);
+    }
+
+    public String getMessage() {
+        return message;
     }
 }

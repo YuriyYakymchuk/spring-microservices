@@ -70,5 +70,6 @@
         <module>apigw</module>
         <module>config</module>
         <module>zipkin</module>
+        <module>event</module>
     </modules>
 </project>
