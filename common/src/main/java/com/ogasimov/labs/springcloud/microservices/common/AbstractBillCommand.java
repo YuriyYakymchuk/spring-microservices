@@ -1,6 +1,7 @@
 package com.ogasimov.labs.springcloud.microservices.common;
 
 public abstract class AbstractBillCommand {
+
     private Integer tableId;
 
     public AbstractBillCommand(Integer tableId) {

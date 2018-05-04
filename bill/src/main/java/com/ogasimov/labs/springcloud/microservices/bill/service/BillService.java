@@ -37,6 +37,10 @@ public class BillService {
         billRepository.delete(bills);
     }
 
+    public List<Bill> getAllBills() {
+        return billRepository.findAll();
+    }
+
     public String getMessage() {
         return message;
     }
