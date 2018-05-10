@@ -4,9 +4,13 @@ import java.util.List;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
+import com.ogasimov.labs.springcloud.microservices.common.AbstractStockCommand;
+import com.ogasimov.labs.springcloud.microservices.common.MinusStockCommand;
 import com.ogasimov.labs.springcloud.microservices.stock.dao.StockRepository;
+import com.ogasimov.labs.springcloud.microservices.stock.messaging.MyChannels;
 import com.ogasimov.labs.springcloud.microservices.stock.model.Stock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,6 +19,13 @@ public class StockService {
 
     @Autowired
     private StockRepository stockRepository;
+
+    @StreamListener(MyChannels.STOCK)
+    public void streamListener(AbstractStockCommand stockCommand) {
+        if (stockCommand instanceof MinusStockCommand) {
+            minusFromStock(stockCommand.getMenuItems());
+        }
+    }
 
     public void minusFromStock(List<Integer> menuItems) {
         menuItems.forEach(menuItemId -> {

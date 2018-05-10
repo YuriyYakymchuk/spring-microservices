@@ -7,5 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, Integer> {
+
     List<Event> findAllByIdBetween(Integer startId, Integer endId);
+
 }

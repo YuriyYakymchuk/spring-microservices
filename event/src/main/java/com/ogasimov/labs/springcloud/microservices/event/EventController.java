@@ -2,6 +2,8 @@ package com.ogasimov.labs.springcloud.microservices.event;
 
 import java.util.List;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.ogasimov.labs.springcloud.microservices.common.EventDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +15,8 @@ public class EventController {
     private EventService eventService;
 
     @GetMapping("/events/{startId}/{count}")
-    public List<Event> getEvents(@PathVariable("startId")  Integer startId, @PathVariable("endId") Integer endId) {
-        return eventService.getBetween(startId, endId);
+    @HystrixCommand
+    public List<EventDto> getEvents(@PathVariable("startId")  Integer startId, @PathVariable("count") Integer count) {
+        return eventService.getEvents(startId, count);
     }
 }

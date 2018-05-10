@@ -11,7 +11,10 @@ import java.util.List;
 public interface TableClient {
 
     @GetMapping("/tables")
-    List<Integer> getFreeTables();
+    List<Integer> getTables();
+
+    @GetMapping("/tables/{occupancy}")
+    List<Integer> getTablesByOccupancy(@PathVariable("occupancy") Boolean occupancy);
 
     @PutMapping("/table/{id}/free")
     void freeTable(@PathVariable("id") Integer id);

@@ -5,13 +5,10 @@ import org.springframework.cloud.stream.annotation.Output;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.SubscribableChannel;
 
-public interface Channel {
+public interface MyChannel {
 
-    String CHANNEL_NAME = "bill";
+    String BILL = "bill";
 
-    @Input(CHANNEL_NAME)
-    SubscribableChannel inputBills();
-
-    @Output(CHANNEL_NAME)
-    MessageChannel outputBills();
+    @Input(BILL)
+    SubscribableChannel bill();
 }

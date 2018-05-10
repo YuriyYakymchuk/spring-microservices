@@ -5,10 +5,15 @@ import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
 import com.ogasimov.labs.springcloud.microservices.bill.dao.BillRepository;
+import com.ogasimov.labs.springcloud.microservices.bill.messaging.channel.MyChannel;
 import com.ogasimov.labs.springcloud.microservices.bill.model.Bill;
+import com.ogasimov.labs.springcloud.microservices.common.AbstractBillCommand;
+import com.ogasimov.labs.springcloud.microservices.common.CreateBillCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,6 +26,18 @@ public class BillService {
 
     @Value("${custom.message}")
     private String message;
+
+    @StreamListener(MyChannel.BILL)
+    private void streamListener(AbstractBillCommand billCommand) {
+        if(billCommand instanceof CreateBillCommand) {
+            createBill(
+                    billCommand.getTableId(),
+                    ((CreateBillCommand) billCommand).getOrderId()
+            );
+        } else {
+            payBills(billCommand.getTableId());
+        }
+    }
 
     public void createBill(Integer tableId, Integer orderId) {
         Bill bill = new Bill();

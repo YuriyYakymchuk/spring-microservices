@@ -25,4 +25,9 @@ public class GuestController {
     public void finishDinner(@PathVariable Integer tableId) {
         dinnerService.finishDinner(tableId);
     }
+
+    @PostMapping("/rebuild")
+    public void rebuildState() {
+        dinnerService.rebuildState();
+    }
 }

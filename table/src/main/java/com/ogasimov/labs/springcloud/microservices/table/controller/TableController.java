@@ -20,9 +20,9 @@ public class TableController {
         return tableService.getTableIds();
     }
 
-    @GetMapping("/tables/free")
-    public List<Integer> getFreeTables() {
-        return tableService.getFreeTableIds();
+    @GetMapping("/tables/{occupancy}")
+    public List<Integer> getTablesByOccupancy(@PathVariable("occupancy") Boolean occupancy) {
+        return tableService.getTableIdsByOccupancy(occupancy);
     }
 
     @PutMapping("/table/{id}/free")

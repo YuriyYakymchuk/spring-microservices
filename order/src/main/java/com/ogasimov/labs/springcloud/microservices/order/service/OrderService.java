@@ -1,17 +1,20 @@
 package com.ogasimov.labs.springcloud.microservices.order.service;
 
-import com.ogasimov.labs.springcloud.microservices.order.dao.MenuItemRepository;
+import com.ogasimov.labs.springcloud.microservices.common.AbstractOrderCommand;
+import com.ogasimov.labs.springcloud.microservices.common.CreateBillCommand;
+import com.ogasimov.labs.springcloud.microservices.common.CreateOrderCommand;
+import com.ogasimov.labs.springcloud.microservices.common.MinusStockCommand;
 import com.ogasimov.labs.springcloud.microservices.order.dao.OrderRepository;
-import com.ogasimov.labs.springcloud.microservices.order.model.MenuItem;
+import com.ogasimov.labs.springcloud.microservices.order.messaging.MyChannels;
 import com.ogasimov.labs.springcloud.microservices.order.model.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -21,35 +24,33 @@ public class OrderService {
     private OrderRepository orderRepository;
 
     @Autowired
-    private StockClient stockClient;
+    private MyChannels myChannels;
 
-    @Autowired
-    private BillClient billClient;
-
-    @Autowired
-    private MenuItemRepository menuItemRepository;
+    @StreamListener(MyChannels.ORDER)
+    public void streamListener(AbstractOrderCommand orderCommand) {
+        if (orderCommand instanceof CreateOrderCommand) {
+            createOrder(
+                    orderCommand.getTableId(),
+                    ((CreateOrderCommand) orderCommand).getMenuItems()
+            );
+        }
+    }
 
     public Integer createOrder(Integer tableId, List<Integer> menuItems) {
-        if(!isAllMenuItemsExist(menuItems)) {
-            throw new EntityNotFoundException("Not all menu items are available.");
-        }
-
         Order order = new Order();
         order.setTableId(tableId);
         orderRepository.save(order);
 
         final Integer orderId = order.getId();
-        stockClient.minusFromStock(menuItems);
-        billClient.createBill(tableId, orderId);
+
+        myChannels.stock().send(
+            MessageBuilder.withPayload(new MinusStockCommand(menuItems)).build()
+        );
+
+        myChannels.bill().send(
+            MessageBuilder.withPayload(new CreateBillCommand(tableId, orderId)).build()
+        );
 
         return orderId;
-    }
-
-    private boolean isAllMenuItemsExist(final List<Integer> menuItemsIDs) {
-        List<MenuItem> menuItems = menuItemRepository.findAll(menuItemsIDs);
-        Set<Integer> existingMenuItems = menuItems.stream()
-                                                     .map(MenuItem::getId)
-                                                     .collect(Collectors.toSet());
-        return existingMenuItems.containsAll(menuItems);
     }
 }

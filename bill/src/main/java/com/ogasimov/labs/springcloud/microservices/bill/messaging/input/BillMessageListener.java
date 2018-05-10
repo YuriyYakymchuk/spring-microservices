@@ -1,7 +1,7 @@
 package com.ogasimov.labs.springcloud.microservices.bill.messaging.input;
 
 import com.ogasimov.labs.springcloud.microservices.bill.dao.BillRepository;
-import com.ogasimov.labs.springcloud.microservices.bill.messaging.channel.Channel;
+import com.ogasimov.labs.springcloud.microservices.bill.messaging.channel.MyChannel;
 import com.ogasimov.labs.springcloud.microservices.bill.model.Bill;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
@@ -17,7 +17,7 @@ public class BillMessageListener {
         this.billRepository = billRepository;
     }
 
-    @StreamListener(target = Channel.CHANNEL_NAME)
+    @StreamListener(target = MyChannel.BILL)
     public void createBill(String message) {
         String[] billInfo = message.replace("\"","").split(" ");
 
