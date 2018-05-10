@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ogasimov.labs.springcloud.microservices.guest.service.DinnerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,7 @@ public class GuestController {
     @Autowired
     private DinnerService dinnerService;
 
-    @PostMapping("/dinner")
+    @PostMapping(value = "/dinner", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Integer startDinner(@RequestBody List<Integer> menuItems) {
         return dinnerService.startDinner(menuItems);
     }

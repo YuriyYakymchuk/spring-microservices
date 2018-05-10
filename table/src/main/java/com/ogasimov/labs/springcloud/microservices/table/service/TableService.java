@@ -7,8 +7,8 @@ import javax.transaction.Transactional;
 
 import com.ogasimov.labs.springcloud.microservices.common.AbstractTableCommand;
 import com.ogasimov.labs.springcloud.microservices.common.FreeTableCommand;
-import com.ogasimov.labs.springcloud.microservices.common.OccupyTableCommand;
 import com.ogasimov.labs.springcloud.microservices.table.dao.TableRepository;
+import com.ogasimov.labs.springcloud.microservices.table.messaging.MyChannels;
 import com.ogasimov.labs.springcloud.microservices.table.model.Table;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
@@ -21,7 +21,7 @@ public class TableService {
     @Autowired
     private TableRepository tableRepository;
 
-    @StreamListener
+    @StreamListener(MyChannels.TABLE)
     public void streamListener(AbstractTableCommand tableCommand) {
         updateTable(tableCommand.getTableId(), tableCommand instanceof FreeTableCommand);
     }
@@ -34,7 +34,7 @@ public class TableService {
     }
 
     public List<Integer> getTableIdsByOccupancy(Boolean occupancy) {
-        return tableRepository.findAllByOccupancy(occupancy)
+        return tableRepository.findAllByFree(occupancy)
                 .stream()
                 .map(Table::getId)
                 .collect(Collectors.toList());
