@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.ogasimov.labs.springcloud.microservices</groupId>
+    <groupId>com.yuriy.labs.springcloud.microservices</groupId>
     <artifactId>stock</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <parent>
-        <groupId>com.ogasimov.labs.springcloud</groupId>
+        <groupId>com.yuriy.labs.springcloud</groupId>
         <artifactId>microservices</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
@@ -66,7 +66,7 @@
             <artifactId>spring-cloud-starter-bus-amqp</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.ogasimov.labs.springcloud.microservices</groupId>
+            <groupId>com.yuriy.labs.springcloud.microservices</groupId>
             <artifactId>common</artifactId>
         </dependency>
 
