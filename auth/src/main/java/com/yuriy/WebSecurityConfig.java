@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Configuration
 class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -29,20 +30,12 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-                .withUser("account")
-                .password("account")
-                .authorities("ACCOUNT_READ", "ACCOUNT_WRITE", "ACCOUNT_PROCESS")
+                .withUser("user")
+                .password("user")
+                .authorities("USER_READ", "USER_WRITE")
                 .and()
-                .withUser("card")
-                .password("card")
-                .authorities("CARD_WRITE", "ACCOUNT_READ")
-                .and()
-                .withUser("client")
-                .password("client")
-                .authorities("CLIENT_READ", "CLIENT_WRITE", "ACCOUNT_READ", "CARD_READ")
-                .and()
-                .withUser("processing")
-                .password("processing")
-                .authorities("PROCESSING", "ACCOUNT_PROCESS");
+                .withUser("admin")
+                .password("admin")
+                .authorities("ADMIN_READ", "ADMIN_WRITE");
     }
 }
