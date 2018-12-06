@@ -4,6 +4,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.yuriy.labs.springcloud.microservices.bill.messaging.output.BillMessagePublisher;
 import com.yuriy.labs.springcloud.microservices.bill.model.Bill;
 import com.yuriy.labs.springcloud.microservices.bill.service.BillService;
+import com.yuriy.labs.springcloud.microservices.bill.service.BillServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

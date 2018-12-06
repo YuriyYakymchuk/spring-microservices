@@ -19,6 +19,7 @@ import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFacto
 @Configuration
 @EnableAuthorizationServer
 public class OAuth2Configuration extends AuthorizationServerConfigurerAdapter {
+
     @Autowired
     @Qualifier("authenticationManagerBean")
     private AuthenticationManager authenticationManager;
@@ -30,7 +31,7 @@ public class OAuth2Configuration extends AuthorizationServerConfigurerAdapter {
 
     @Bean
     protected JwtAccessTokenConverter jwtTokenEnhancer() {
-        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("jwt.jks"), "YuriySecret".toCharArray());
+        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("jwt.jks"), "YuriySecretKey".toCharArray());
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
         converter.setKeyPair(keyStoreKeyFactory.getKeyPair("jwt"));
         return converter;
@@ -38,9 +39,16 @@ public class OAuth2Configuration extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory()
-                .withClient("client")
-                .secret("secret")
+        clients
+            .inMemory()
+                .withClient("Bill")
+                .secret("BillSecret")
+                .scopes("openid")
+                .autoApprove(true)
+                .authorizedGrantTypes("implicit","refresh_token", "password", "authorization_code")
+            .and()
+                .withClient("Table")
+                .secret("TableSecret")
                 .scopes("openid")
                 .autoApprove(true)
                 .authorizedGrantTypes("implicit","refresh_token", "password", "authorization_code");

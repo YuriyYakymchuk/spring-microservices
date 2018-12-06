@@ -1,64 +1,18 @@
 package com.yuriy.labs.springcloud.microservices.bill.service;
 
-import java.util.List;
-import javax.persistence.EntityNotFoundException;
-import javax.transaction.Transactional;
-
-import com.yuriy.labs.springcloud.microservices.bill.dao.BillRepository;
-import com.yuriy.labs.springcloud.microservices.bill.messaging.channel.MyChannel;
 import com.yuriy.labs.springcloud.microservices.bill.model.Bill;
-import com.yuriy.labs.springcloud.microservices.common.AbstractBillCommand;
-import com.yuriy.labs.springcloud.microservices.common.CreateBillCommand;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.cloud.stream.annotation.StreamListener;
-import org.springframework.cloud.stream.messaging.Sink;
-import org.springframework.stereotype.Service;
+import org.springframework.security.access.prepost.PreAuthorize;
 
-@Service
-@RefreshScope
-@Transactional
-public class BillService {
+import java.util.List;
 
-    @Autowired
-    private BillRepository billRepository;
+public interface BillService {
 
-    @Value("${custom.message}")
-    private String message;
+    @PreAuthorize("hasAuthority('ADMIN_WRITE')")
+    String getMessage();
 
-    @StreamListener(MyChannel.BILL)
-    private void streamListener(AbstractBillCommand billCommand) {
-        if(billCommand instanceof CreateBillCommand) {
-            createBill(
-                    billCommand.getTableId(),
-                    ((CreateBillCommand) billCommand).getOrderId()
-            );
-        } else {
-            payBills(billCommand.getTableId());
-        }
-    }
+    void createBill(Integer tableId, Integer orderId);
 
-    public void createBill(Integer tableId, Integer orderId) {
-        Bill bill = new Bill();
-        bill.setTableId(tableId);
-        bill.setOrderId(orderId);
-        billRepository.save(bill);
-    }
+    void payBills(Integer tableId);
 
-    public void payBills(Integer tableId) {
-        List<Bill> bills = billRepository.findAllByTableId(tableId);
-        if (bills.isEmpty()) {
-            throw  new EntityNotFoundException("Bills not found");
-        }
-        billRepository.delete(bills);
-    }
-
-    public List<Bill> getAllBills() {
-        return billRepository.findAll();
-    }
-
-    public String getMessage() {
-        return message;
-    }
+    List<Bill> getAllBills();
 }
