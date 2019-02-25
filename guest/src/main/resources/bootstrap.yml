@@ -8,3 +8,4 @@ spring:
         max-attempts: 3
   application:
     name: Guest
+

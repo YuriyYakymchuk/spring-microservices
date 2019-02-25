@@ -1,10 +1,8 @@
 package com.yuriy.labs.springcloud.microservices.bill.controller;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.yuriy.labs.springcloud.microservices.bill.messaging.output.BillMessagePublisher;
 import com.yuriy.labs.springcloud.microservices.bill.model.Bill;
 import com.yuriy.labs.springcloud.microservices.bill.service.BillService;
-import com.yuriy.labs.springcloud.microservices.bill.service.BillServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,18 +14,10 @@ public class BillController {
     @Autowired
     private BillService billService;
 
-    @Autowired
-    private BillMessagePublisher billMessagePublisher;
-
     @GetMapping("/bill")
     @HystrixCommand
     public List<Bill> getAllBills() {
         return billService.getAllBills();
-    }
-
-    @PostMapping("/bill/message")
-    public void createBillMessage(@RequestBody String message) {
-        billMessagePublisher.sendBillMessage(message);
     }
 
     @PostMapping("/bill/{tableId}/{orderId}")
@@ -36,7 +26,7 @@ public class BillController {
         billService.createBill(tableId, orderId);
     }
 
-    @HystrixCommand
+    @HystrixCommand(fallbackMethod = "successFallbackMethod")
     @DeleteMapping("/bills/{tableId}")
     public String payBills(@PathVariable Integer tableId) {
         billService.payBills(tableId);
@@ -49,12 +39,7 @@ public class BillController {
         return billService.getMessage();
     }
 
-    @PostMapping("/bill/git")
-    public void gitWebHook() {
-        System.out.println("Web hook!!!");
-    }
-
-    public String fallbackMethod(Integer tableId) {
-        throw new RuntimeException("Something went wrong");
+    public String successFallbackMethod(Integer tableId) {
+        return "Something went wrong.";
     }
 }

@@ -1,46 +1,31 @@
 package com.yuriy.labs.springcloud.microservices.bill.service;
 
-import java.util.List;
-import javax.persistence.EntityNotFoundException;
-import javax.transaction.Transactional;
-
 import com.yuriy.labs.springcloud.microservices.bill.dao.BillRepository;
-import com.yuriy.labs.springcloud.microservices.bill.messaging.channel.MyChannel;
 import com.yuriy.labs.springcloud.microservices.bill.model.Bill;
-import com.yuriy.labs.springcloud.microservices.common.AbstractBillCommand;
-import com.yuriy.labs.springcloud.microservices.common.CreateBillCommand;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.cloud.stream.annotation.StreamListener;
-import org.springframework.cloud.stream.messaging.Sink;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @RefreshScope
 @Transactional
+@Slf4j
 public class BillServiceImpl implements BillService {
 
     @Autowired
     private BillRepository billRepository;
 
+    @Autowired
+    private TableClient tableClient;
+
     @Value("${custom.message}")
     private String message;
-
-    @StreamListener(MyChannel.BILL)
-    private void streamListener(AbstractBillCommand billCommand) {
-        if(billCommand instanceof CreateBillCommand) {
-            createBill(
-                    billCommand.getTableId(),
-                    ((CreateBillCommand) billCommand).getOrderId()
-            );
-        } else {
-            payBills(billCommand.getTableId());
-        }
-    }
 
     @Override
     public void createBill(Integer tableId, Integer orderId) {
@@ -57,6 +42,8 @@ public class BillServiceImpl implements BillService {
             throw  new EntityNotFoundException("Bills not found");
         }
         billRepository.delete(bills);
+        tableClient.freeTable(tableId);
+        log.info("Bill was paid for table {}", tableId);
     }
 
     @Override
