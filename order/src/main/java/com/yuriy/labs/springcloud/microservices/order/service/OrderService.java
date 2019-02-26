@@ -46,7 +46,7 @@ public class OrderService {
     }
 
     private boolean isAllMenuItemsExist(final List<Integer> menuItemsIDs) {
-        List<MenuItem> menuItems = menuItemRepository.findAll(menuItemsIDs);
+        List<MenuItem> menuItems = menuItemRepository.findAllById(menuItemsIDs);
         Set<Integer> existingMenuItems = menuItems.stream()
                 .map(MenuItem::getId)
                 .collect(Collectors.toSet());

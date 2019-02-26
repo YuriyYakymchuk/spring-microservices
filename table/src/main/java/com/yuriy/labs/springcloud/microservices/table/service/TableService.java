@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,10 +33,11 @@ public class TableService {
     }
 
     public void updateTable(Integer id, boolean isFree) {
-        Table table = tableRepository.findOne(id);
-        if (table == null) {
+        Optional<Table> optional = tableRepository.findById(id);
+        if (!optional.isPresent()) {
             throw  new EntityNotFoundException("Table not found");
         }
+        Table table = optional.get();
         table.setFree(isFree);
         tableRepository.save(table);
     }

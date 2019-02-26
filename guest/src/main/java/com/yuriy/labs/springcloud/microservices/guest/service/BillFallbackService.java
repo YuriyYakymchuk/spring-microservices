@@ -1,13 +1,20 @@
 package com.yuriy.labs.springcloud.microservices.guest.service;
 
-import org.springframework.stereotype.Component;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
+@Slf4j
 public class BillFallbackService implements BillClient {
 
     @Override
-    public void payBills(Integer tableId) {
-        System.out.println("Fallback method to handle bill payment");
+    public String payBills(Integer tableId) {
+        log.warn("Fallback method to handle bill payment");
+        return "Check stack trace";
     }
 
+    @Override
+    public void triggerError() {
+        log.warn("Fallback method is called to handle the exception.");
+    }
 }

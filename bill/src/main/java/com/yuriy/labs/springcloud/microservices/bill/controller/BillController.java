@@ -27,10 +27,16 @@ public class BillController {
     }
 
     @HystrixCommand(fallbackMethod = "successFallbackMethod")
-    @DeleteMapping("/bills/{tableId}")
+    @DeleteMapping("/bill/{tableId}")
     public String payBills(@PathVariable Integer tableId) {
         billService.payBills(tableId);
         return "Ok";
+    }
+
+    @GetMapping("/bill/error")
+    @HystrixCommand
+    public void triggerError() {
+        throw new RuntimeException("Circuit breaker test.");
     }
 
     @HystrixCommand

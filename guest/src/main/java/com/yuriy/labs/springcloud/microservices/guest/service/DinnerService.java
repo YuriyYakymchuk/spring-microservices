@@ -18,7 +18,7 @@ public class DinnerService {
     private OrderClient orderClient;
 
     @Autowired
-    @Qualifier("Bill")
+  //  @Qualifier("Bill")
     private BillClient billClient;
 
     public Integer startDinner(List<Integer> menuItems) {
@@ -42,7 +42,11 @@ public class DinnerService {
     }
 
     public void finishDinner(Integer tableId) {
-        billClient.payBills(tableId);
+        log.info("Response from the Bill client: {}", billClient.payBills(tableId));
+    }
+
+    public void testCircuitBreaker() {
+        billClient.triggerError();
     }
 
 }
