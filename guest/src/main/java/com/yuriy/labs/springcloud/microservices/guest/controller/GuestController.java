@@ -23,9 +23,4 @@ public class GuestController {
         return dinnerService.finishDinner(tableId);
     }
 
-    @GetMapping("/dinner/error")
-    public void testCircuitBreaker() {
-        dinnerService.testCircuitBreaker();
-    }
-
 }
