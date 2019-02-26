@@ -19,8 +19,8 @@ public class GuestController {
     }
 
     @DeleteMapping("/dinner/{tableId}")
-    public void finishDinner(@PathVariable Integer tableId) {
-        dinnerService.finishDinner(tableId);
+    public String finishDinner(@PathVariable Integer tableId) {
+        return dinnerService.finishDinner(tableId);
     }
 
     @GetMapping("/dinner/error")
