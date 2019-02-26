@@ -41,7 +41,7 @@ public class BillServiceImpl implements BillService {
         if (bills.isEmpty()) {
             throw  new EntityNotFoundException("Bills not found");
         }
-        billRepository.deleteAll(bills);
+        billRepository.delete(bills);
         tableClient.freeTable(tableId);
         log.info("Bill was paid for table {}", tableId);
     }
