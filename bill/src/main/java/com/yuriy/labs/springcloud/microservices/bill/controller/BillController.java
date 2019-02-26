@@ -26,11 +26,18 @@ public class BillController {
         billService.createBill(tableId, orderId);
     }
 
+    @DeleteMapping("/bill/{tableId}")
     @HystrixCommand(fallbackMethod = "successFallbackMethod")
-    @DeleteMapping("/bills/{tableId}")
     public String payBills(@PathVariable Integer tableId) {
         billService.payBills(tableId);
         return "Ok";
+    }
+
+    @HystrixCommand
+    @GetMapping("/bill/error")
+    public String throwException() {
+        return "Ok";
+        //throw new RuntimeException();
     }
 
     @HystrixCommand
@@ -40,6 +47,6 @@ public class BillController {
     }
 
     public String successFallbackMethod(Integer tableId) {
-        return "Something went wrong.";
+        return "Bill hasn't been paid. Something went wrong.";
     }
 }

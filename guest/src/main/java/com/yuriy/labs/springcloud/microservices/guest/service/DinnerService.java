@@ -18,6 +18,7 @@ public class DinnerService {
     private OrderClient orderClient;
 
     @Autowired
+    @Qualifier("BillClient")
     private BillClient billClient;
 
     public Integer startDinner(List<Integer> menuItems) {
@@ -42,6 +43,10 @@ public class DinnerService {
 
     public String finishDinner(Integer tableId) {
         return billClient.payBills(tableId);
+    }
+
+    public String testCircuitBreaker() {
+        return billClient.throwException();
     }
 
 }
