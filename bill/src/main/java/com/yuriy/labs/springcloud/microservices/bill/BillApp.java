@@ -10,7 +10,7 @@ import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
-//@EnableHystrix
+@EnableHystrix
 @EnableCircuitBreaker
 public class BillApp {
     public static void main(String[] args) {

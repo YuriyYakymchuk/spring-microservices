@@ -36,8 +36,8 @@ public class BillController {
     @HystrixCommand
     @GetMapping("/bill/error")
     public String throwException() {
-        return "Ok";
-        //throw new RuntimeException();
+        //return "Ok";
+        throw new RuntimeException();
     }
 
     @HystrixCommand
