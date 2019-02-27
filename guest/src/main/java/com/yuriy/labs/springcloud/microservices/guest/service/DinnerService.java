@@ -3,8 +3,12 @@ package com.yuriy.labs.springcloud.microservices.guest.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.oauth2.client.OAuth2RestOperations;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Service
@@ -20,6 +24,11 @@ public class DinnerService {
     @Autowired
     @Qualifier("BillClient")
     private BillClient billClient;
+
+    @Autowired
+    private OAuth2RestOperations oAuth2RestTemplate;
+
+    private String token;
 
     public Integer startDinner(List<Integer> menuItems) {
         //check free tables
@@ -42,11 +51,16 @@ public class DinnerService {
     }
 
     public String finishDinner(Integer tableId) {
-        return billClient.payBills(tableId);
+        return billClient.payBills(token, tableId);
     }
 
     public String testCircuitBreaker() {
-        return billClient.throwException();
+        return billClient.throwException(token);
     }
 
+    @PostConstruct
+    private void setToken() {
+        OAuth2AccessToken oAuth2AccessToken = oAuth2RestTemplate.getAccessToken();
+        token = oAuth2AccessToken.getTokenType() + " " + oAuth2AccessToken.getValue();
+    }
 }

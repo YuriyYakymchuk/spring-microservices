@@ -8,12 +8,12 @@ import org.springframework.stereotype.Component;
 public class BillClientFallbackService implements BillClient{
 
     @Override
-    public String payBills(Integer tableId) {
+    public String payBills(String token, Integer tableId) {
         return "Pay bills fallback method executed.";
     }
 
     @Override
-    public String throwException() {
+    public String throwException(String token) {
         return "Circuit Breaker works.";
     }
 }

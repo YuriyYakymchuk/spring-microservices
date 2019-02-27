@@ -1,4 +1,4 @@
-package com.yuriy.labs.springcloud.microservices.bill.security;
+package com.yuriy.labs.springcloud.microservices.guest.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,14 +13,13 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
         resources
-                .resourceId("Bill");
+                .resourceId("Guest");
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-            .antMatchers("/bill/**").access("hasAuthority('ADMIN_WRITE')")
-            .anyRequest().fullyAuthenticated();
+            .anyRequest().permitAll();
     }
 }
